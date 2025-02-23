@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather Forecast Application</h1>
+        </header>
+
+        <!-- Input Form -->
+        <section class="form-section">
+            <form method="POST">
+                <input type="text" name="city" placeholder="Enter city name" required>
+                <button type="submit">Get Weather</button>
+            </form>
+        </section>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Current Weather Section -->
+        {% if weather %}
+        <section class="current-weather">
+            <h2>Current Weather in {{ weather.name }}</h2>
+            <div class="weather-details">
+                <p><strong>Temperature:</strong> {{ weather.main.temp }}°C</p>
+                <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
+                <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
+                <p><strong>Weather:</strong> {{ weather.weather[0].description }}</p>
+                <p><strong>Wind Speed:</strong> {{ weather.wind.speed }} m/s</p>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Weather Forecast Section -->
+        {% if forecast_data %}
+        <section class="forecast">
+            <h2>5-Day Weather Forecast</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date and Time</th>
+                        <th>Temperature (°C)</th>
+                        <th>Humidity (%)</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in forecast_data %}
+                    <tr>
+                        <td>{{ entry.dt_txt }}</td>
+                        <td>{{ entry.temperature }}</td>
+                        <td>{{ entry.humidity }}</td>
+                        <td>{{ entry.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Weather Data Visualizations -->
+        <section class="visualizations">
+            <h2>Weather Data Visualizations</h2>
+            <div class="charts">
+                <div>
+                    <h3>Temperature Forecast</h3>
+                    <img src="{{ url_for('static', filename='temperature_forecast.png') }}" alt="Temperature Forecast">
+                </div>
+                <div>
+                    <h3>Humidity Forecast</h3>
+                    <img src="{{ url_for('static', filename='humidity_forecast.png') }}" alt="Humidity Forecast">
+                </div>
+                <div>
+                    <h3>Pressure Forecast</h3>
+                    <img src="{{ url_for('static', filename='pressure_forecast.png') }}" alt="Pressure Forecast">
+                </div>
+                <div>
+                    <h3>Wind Speed Forecast</h3>
+                    <img src="{{ url_for('static', filename='wind_speed_bar.png') }}" alt="Wind Speed Forecast">
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
